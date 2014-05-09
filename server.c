@@ -58,7 +58,7 @@ int main
         int   message_size;
         char *   message;
 
-        read(client, (char*)&message_size, 4);
+        read(client, (char*)&message_size, sizeof(int));
         
         printf("message size: %d\n", message_size); 
         
@@ -73,15 +73,3 @@ int main
         
     return 0;
 }
-
-       
-
-        
-
-    
-
-       
-
-
-
-
