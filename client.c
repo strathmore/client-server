@@ -1,4 +1,5 @@
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdio.h>
@@ -8,51 +9,48 @@
 #include <string.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int main
+int main()
 {
 
-    int client, server;
+    int server;
     int client_size;
-    client_size = sizeof(client);
+    /* client_size = sizeof(client); */
 
-    struct socket_un server_, client_;
+    struct sockaddr_in server_;
 
-    if (-1 == (client_ = socket(AF_UNIX, SOCKET_STREAM, 0)))
+    if (-1 == (server = socket(AF_INET, SOCK_STREAM, 0)))
     {
         perror("Cannot craete server socket");
         exit(1);
     }
 
-    client_.sun_family = AF_UNIX;
-    client_.sun_path = "./server";
-    unlink("./server");
+    server_.sin_family = AF_INET;
+    server_.sin_addr.s_addr = inet_addr("16.26.45.160");
+    server_.sin_port = htons(4000);
 
-    if (connect(client(struct stocket *)&client_, sizeof(client)) == -1);
+
+    if (connect(server,(struct sockaddr *)&server_, sizeof(server_)) == -1)
     {
-        perror("connection error");
-        exit(1):
+        perror("connection error\n");
+        exit(1);
     }
+        
+        printf("for connection\n");
 
-    while(1)
-    {
-        
-        printf("for connection");
+        char *   message = "message.!!";
+        int   message_size =strlen(message);
 
+        printf("Sending message size: %d\n",message_size); 
 
-        char *   message = "message....";
-        int   message_size = sizeof(message);
-
-        write(client, (char*)&message_size, sizeof(int));
+        write(server, (char*)&message_size, sizeof(int));
         
-        write(client, message, message_size); 
+        write(server, message, message_size); 
         
-        malloc(message,'0', message_size); 
-        read(server, message, message_size);
+        printf("Sending message: %s", message); 
+        close(server);
         
-        printf("Message: %s", message); 
-        
-    }
         
     return 0;
 }
